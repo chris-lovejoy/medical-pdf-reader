@@ -32,8 +32,8 @@ class TextToClinicalJSON():
         into a structured clinical JSON format with the schema defined in the pydantic data model.
         """
         self.chunk_and_parse_doc()
-        # self.combine_parsed_chunks()
-        # self.clean_clinical_json()
+        self.combine_parsed_chunks()
+        self.clean_clinical_json()
 
     async def chunk_and_parse_doc(self):
         """
@@ -64,3 +64,47 @@ class TextToClinicalJSON():
     
         self.chunked_parsing = validated_data
     
+    def combine_parsed_chunks(self):
+        """
+        This function combines the list of dictionaries returned by chunk_and_parse_doc
+        into a single combined dictionary, by merging the same section in different chunks
+        into one.
+        NOTE: this method automatically generalises to different pydantic data structures
+        """
+
+        combined_dict = {}
+        for tup in self.chunked_parsing:
+            key = tup[0]
+            value = tup[1]
+            if value is not None:
+                if key in combined_dict:
+                    combined_dict[key] += "\n\n" + str(value)
+                else:
+                    combined_dict[key] = str(value)
+            # NOTE: possible alternative is parsing into a list for separate entries, rather than a combined string.
+
+        self.combined_parsing = combined_dict
+
+    def clean_clinical_json(self):
+        """
+        This function reviews the final structured clinical JSON output and cleans it,
+        by removing duplicates, fragements of sentences and anything information not in
+        the appropriate section.
+        """
+
+        clinical_json = copy.deepcopy(self.combined_parsing)
+
+        # TODO: implement this
+
+        # Initial thoughts on the loop is:
+        # 1 extract all of the information for section x, word for word [DONE]
+        # 2 check that there is no more information in the medical record which should be included
+        # 3 check that all of the information that was extracted is most relevant for this section, and not another
+
+        # Also:
+        # removing duplications, removing anything that is not relevant to the section
+        # Removing fragments of sentences perhaps, and anything else
+
+        # May need to specify JSON output format here
+
+        self.clinical_json = clinical_json
