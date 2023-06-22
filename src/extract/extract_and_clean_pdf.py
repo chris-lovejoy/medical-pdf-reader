@@ -22,6 +22,14 @@ class PDFtoText:
         self.identify_acronyms_llm = config.identify_acronyms_llm
         self.remove_acronyms_llm = config.remove_acronyms_llm 
     
+    def load_and_clean_text(self):
+        """
+        This function calls the below functions to complete the full loading and cleaning pipeline.
+        """
+        self.load_initial_text()
+        self.clean_initial_text_auto()
+        self.clean_initial_text_llm()
+
     def load_initial_text(self):
         """
         This function loads the initial text from the PDF using the unstructured library.
