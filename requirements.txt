@@ -4,6 +4,7 @@ antlr4-python3-runtime==4.9.3
 anyio==3.7.0
 argilla==1.10.0
 async-timeout==4.0.2
+asyncio==3.4.3
 attrs==23.1.0
 backoff==2.2.1
 certifi==2023.5.7
