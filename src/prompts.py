@@ -17,7 +17,7 @@ identify_acronyms_prompt_template = """Please identify all the medical acronyms 
 
         EXTRACTED TEXT: {context}
 
-        Please return the acronyms in as a list, for example: BTW, NIMBY, NA, HPC
+        Please return the medical acronyms in as a list, for example: CPR, COPD, MRI, ECG
 
         ACRONYMS: """
 
