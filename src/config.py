@@ -11,3 +11,15 @@ remove_symbols_llm = ChatOpenAI(
     temperature=0,
     openai_api_key=openai_api_key
     )
+
+identify_acronyms_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0,
+    openai_api_key=openai_api_key
+    )
+
+remove_acronyms_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0,
+    openai_api_key=openai_api_key
+    )

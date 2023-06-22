@@ -1,6 +1,5 @@
 """This file extracts and cleans text from the medical record PDF"""
 
-
 from unstructured.partition.pdf import partition_pdf
 from unstructured.cleaners.core import clean, clean_non_ascii_chars
 
@@ -19,7 +18,9 @@ class PDFtoText:
         self.dir = pdf_dir
         self.initial_text = None
         self.clean_text = None
-        self.remove_symbols_llm = config.remove_symbols_llm        
+        self.remove_symbols_llm = config.remove_symbols_llm       
+        self.identify_acronyms_llm = config.identify_acronyms_llm
+        self.remove_acronyms_llm = config.remove_acronyms_llm 
     
     def load_initial_text(self):
         """
@@ -61,7 +62,7 @@ class PDFtoText:
         clean_text = self.remove_symbols_with_llm()
 
         # Use LLM to expand out acronyms
-        # clean_text = self.expand_acronyms_with_llm(clean_text)
+        clean_text = self.expand_acronyms_with_llm(clean_text)
 
         # TODO: consider implementing LLM call to fix spelling and grammatical mistakes
 
@@ -89,5 +90,33 @@ class PDFtoText:
         return clean_extracted_text[0]['text']
 
 
-    def expand_acronyms_with_llm(clean_text):
-        return None
+    def expand_acronyms_with_llm(self, clean_text):
+        """
+        This function uses LLMs to expand out medical acronyms in the text.
+        It does so in two stages:
+        (1) Identify all the acronyms in the text
+        (2) Use that list of acronyms to replace the acronyms where possible.
+        """
+
+        # TODO: consider an alternative implementation:
+        # (1) identify all acronyms in the text (using an LLM)
+        # (2) define a mapping of acronyms to full words as a dictionary/JSON and return it (using an LLM, 
+        #       which can see the wider context of the acronyms. perhaps with few shot examples)
+        # (3) then, apply that mapping to the text (not using an LLM)
+        # TODO: also, consider modifying to a medical-specific model here -> probably using langchain
+
+        llm_chain = LLMChain(
+            llm=self.identify_acronyms_llm,
+            prompt=prompts.identify_acronyms_prompt
+        )
+        list_of_acronyms = llm_chain.apply([{"context": clean_text}])
+        # print(list_of_acronyms)
+
+        llm_chain = LLMChain(
+            llm=self.remove_acronyms_llm,
+            prompt=prompts.replace_acronyms_prompt
+        )
+        clean_expanded_text = llm_chain.apply([{"context": clean_text, "list_of_acronyms": list_of_acronyms}])
+        # print(clean_expanded_text)
+
+        return clean_expanded_text[0]['text']
