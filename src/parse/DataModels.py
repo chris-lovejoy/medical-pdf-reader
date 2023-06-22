@@ -55,3 +55,46 @@ class ClinicalJSON(BaseModel):
         # - Administrative information
         # - Vital signs
         # - Blood tests results?
+
+
+class ComplexClinicalJSON(BaseModel):
+        """
+        An alternative schema with more granular divisions of fields.
+        """
+
+        # TODO: implement this.
+
+        # Fields which can be easily sub-divided further with sub-field schemas:
+        # Physical examination: {"organ_system": "description of findings"}
+        # Family history: {"family_member: "medical_conditions"}
+        # Social history: {"area e.g. substance use": "description"}
+        # Treatment plan: {"treatment_item": "first treatment item", "treatment_item": "second treatment item"}
+        # (as per https://eyurtsev.github.io/kor/validation.html#complex-structure)
+
+
+class SimpleClinicalJSON(BaseModel):
+        """
+        An alternative schema which has fewer fields.
+        """
+        chief_complaint: Optional[str] = Field(
+                description="The symptom or symptoms that brought the patient to the doctor and how they have evolved over time. Also known as the presenting complaint",
+                examples = [
+                    ("Presenting complaint chest pain. Patient reported with chest pain since yesterday and some shortness of breath overnight. Doctors assessment: likely musculoskeletal chest pain, with some anxiety",
+                    {"chief_complaint": "chest pain and shortness of breath"}),
+                ]
+        )
+        medical_context: Optional[str] = Field(
+            description="All background medical information about the patient (outside the presenting complaint)."
+        )
+        medical_findings: Optional[str] = Field(
+            description="All examination findings, test results and other investigations performed by doctors."
+        )
+        social_context: Optional[str] = Field(
+            description="All background social information about the patient."
+        )
+        treatment_plan: Optional[str] = Field(
+            description="The step-by-step treatment plan by the doctor for the patient. Usually found at the end of clincial notes.",
+        )
+        # other: Optional[str] = Field(
+        #     description="All other information that doesn't fit in other sections."
+        # )
