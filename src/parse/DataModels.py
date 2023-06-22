@@ -3,6 +3,11 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
+class Medication(BaseModel):
+        name: str = Field(description="The name of the medication.")
+        dose: str = Field(description="The dose of the medication.")
+
+
 class ClinicalJSON(BaseModel):
         chief_complaint: Optional[str] = Field(
             description="The symptom or symptoms that brought the patient to the doctor and how they have evolved over time. Also known as the presenting complaint",
