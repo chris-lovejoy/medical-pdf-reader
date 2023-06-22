@@ -2,6 +2,7 @@
 
 
 from unstructured.partition.pdf import partition_pdf
+from unstructured.cleaners.core import clean, clean_non_ascii_chars
 
 class PDFtoText:
     """
@@ -11,6 +12,7 @@ class PDFtoText:
     def __init__(self, pdf_dir):
         self.dir = pdf_dir
         self.initial_text = None
+        self.clean_text = None
         
     
     def load_initial_text(self):
@@ -23,4 +25,20 @@ class PDFtoText:
             text += "\n" + str(element)
         self.initial_text = text
 
-    
+    def clean_initial_text_auto(self):
+        """
+        This function uses the unstructured library to clean the initial text
+        """
+        # Declare clean text variable to pass through into subsequent functions
+        clean_text = self.initial_text
+
+        # Use unstructured library cleaner functions
+        clean_text = clean(clean_text, dashes=True, bullets=True, 
+                           lowercase=False, extra_whitespace=False)
+        clean_text = clean_non_ascii_chars(clean_text)
+
+        # TODO: Consider adding alternative methods of cleaning too, such as unstructured
+        # library cleaning functions and spacy functions as per this article:
+        # https://www.analyticsvidhya.com/blog/2021/06/data-extraction-from-unstructured-pdfs/
+
+        self.clean_text = clean_text
