@@ -4,7 +4,7 @@ from langchain.chains import RetrievalQA
 from langchain import LLMChain
 
 from .. import prompts
-from .. import config
+from .. import models
 
 class QueryClinicalJSON():
     """
@@ -13,10 +13,10 @@ class QueryClinicalJSON():
     """
     def __init__(self, clinical_json):
         self.clinical_json = clinical_json
-        self.extract_info_llm = config.extract_info_llm
-        self.answer_query_llm = config.answer_query_llm
-        self.specify_source_llm = config.specify_source_llm
-        self.evaluate_confidence_llm = config.evaluate_confidence_llm
+        self.extract_info_llm = models.extract_info_llm
+        self.answer_query_llm = models.answer_query_llm
+        self.specify_source_llm = models.specify_source_llm
+        self.evaluate_confidence_llm = models.evaluate_confidence_llm
         self.extract_chain_type = "stuff"
         self.query_chain_type = "stuff"
         self.medical_record_extracts = self.extract_strings_from_clinical_json()

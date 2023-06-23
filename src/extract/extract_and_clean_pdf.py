@@ -5,7 +5,7 @@ from unstructured.cleaners.core import clean, clean_non_ascii_chars
 
 from langchain import LLMChain
 
-from .. import config
+from .. import models
 from .. import prompts
 
 
@@ -18,9 +18,9 @@ class PDFtoText:
         self.dir = pdf_dir
         self.initial_text = None
         self.clean_text = None
-        self.remove_symbols_llm = config.remove_symbols_llm       
-        self.identify_acronyms_llm = config.identify_acronyms_llm
-        self.remove_acronyms_llm = config.remove_acronyms_llm 
+        self.remove_symbols_llm = models.remove_symbols_llm       
+        self.identify_acronyms_llm = models.identify_acronyms_llm
+        self.remove_acronyms_llm = models.remove_acronyms_llm 
     
     def load_and_clean_text(self):
         """

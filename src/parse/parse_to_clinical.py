@@ -5,7 +5,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from kor import extract_from_documents, from_pydantic, create_extraction_chain
 
 from .DataModels import ClinicalJSON
-from .. import config
+from .. import models
 
 
 class TextToClinicalJSON():
@@ -19,7 +19,7 @@ class TextToClinicalJSON():
             description="Extract information from medical text into a structured clinical format.",
             # TODO consider writing an example (as per https://eyurtsev.github.io/kor/document_extraction.html)
         )
-        self.clinical_parsing_llm = config.clinical_parsing_llm
+        self.clinical_parsing_llm = models.clinical_parsing_llm
         self.text_splitter = RecursiveCharacterTextSplitter() 
         self.chunked_parsing = None
         self.combined_parsing = None
