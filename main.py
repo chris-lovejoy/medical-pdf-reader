@@ -4,6 +4,7 @@ and querying pipeline.
 """
 
 import asyncio
+import json
 
 from src.extract.extract_and_clean_pdf import PDFtoText
 from src.parse.parse_to_clinical import TextToClinicalJSON
@@ -16,7 +17,8 @@ saving = True
 
 skip_pdf_extracting = False
 skip_parsing = False
-
+skip_extraction_query = False
+skip_question_query = False
 
 
 
@@ -77,8 +79,50 @@ def parse_clinical_json_from_text(clean_text):
     return clinical_json
 
 
+
+
+def extract_from_clinical_json(clinical_json):
+    if not skip_extraction_query:
+        queryObject = QueryClinicalJSON(clinical_json)
+        if reporting:
+            print("\nPerforming extraction queries...")
+        for index, info_to_extract in enumerate(extraction_list):
+            queryObject.extract_info(info_to_extract)
+            if reporting:
+                print(f"\nQUERY {index + 1}:")
+                print(f"{info_to_extract}: {queryObject.extracted_responses[info_to_extract]}")
+        if reporting:
+            print("\nExtraction queries complete.")
+    else:
+        pass
+
+if show_warnings == False:
+    # Filter out the specific UserWarning category
+    warnings.filterwarnings("ignore", category=UserWarning)
+
+def query_from_clinical_json(clinical_json):
+    if not skip_question_query:
+        queryObject = QueryClinicalJSON(clinical_json)
+        if reporting:
+            print("\nPerforming question queries...")
+        for index, medical_query in enumerate(query_list):
+            queryObject.answer_query(medical_query)
+            if reporting:
+                print(f"\nQUERY {index + 1}:")
+                print(f"QUESTION: {medical_query}")
+                print(f"RESPONSE: {queryObject.query_responses[index]['answer']}")
+                print(f"SUPPORTING EVIDENCE: {queryObject.query_responses[index]['source_quote']}")
+                print(f"CONFIDENCE: {queryObject.query_responses[index]['confidence_score']}")
+        if reporting:
+            print("\nQuestion queries complete.")
+    else:
+        pass
+
+
 if __name__ == '__main__':
 
     clean_text = extract_text_from_pdf()
     clinical_json = parse_clinical_json_from_text(clean_text)
+    extract_from_clinical_json(clinical_json)
+    query_from_clinical_json(clinical_json)
 
