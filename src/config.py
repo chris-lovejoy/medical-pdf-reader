@@ -4,7 +4,9 @@ from langchain.chat_models import ChatOpenAI
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
 openai_api_key = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = openai_api_key
 
 
 # (1) EXTRACT
@@ -43,3 +45,40 @@ clinical_parsing_llm = ChatOpenAI(
 #     temperature=0,
 #     openai_api_key=openai_api_key
 # )
+
+
+
+
+
+# (3) EXTRACT AND QUERY
+
+extract_info_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0.0,
+)
+
+answer_query_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0.0,
+)
+
+# Alternative clinical LLM for query task
+# answer_query_llm = HuggingFaceHub(
+#     repo_id="emilyalsentzer/Bio_ClinicalBERT",
+#     model_kwargs={"temperature": 0, "max_length": 64},
+#     task="text-generation"
+# )
+
+specify_source_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0.0,
+)
+
+evaluate_confidence_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0.0,
+)
+
+
+
+
