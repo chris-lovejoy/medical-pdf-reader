@@ -1,7 +1,7 @@
-# Medical PDF Reader (Work In Progress)
+# Medical PDF Reader
 An application to extract and query medical record PDFs
 
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme) | [![run unit tests](https://github.com/chris-lovejoy/medical-pdf-reader/actions/workflows/run_pytests.yml/badge.svg)](https://github.com/chris-lovejoy/medical-pdf-reader/actions/workflows/run_pytests.yml)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme) [![run unit tests](https://github.com/chris-lovejoy/medical-pdf-reader/actions/workflows/run_pytests.yml/badge.svg)](https://github.com/chris-lovejoy/medical-pdf-reader/actions/workflows/run_pytests.yml)
 
 
 ## Table of Contents
@@ -55,13 +55,41 @@ The format is specified in [.env.example](.env.example).
 <!-- TODO: consider adding a new config.py file with other considerations -->
 
 
+
 ## Usage
 
-- run python main.py
-- or visualise in streamlit app
-- (can run local testing with pytest)
+After setting up the local environemnt, you can either run the app via the command line or interact with it via streamlit.
 
 
+### Via the command line
+
+First, set up the configuration in [main.py](./main.py), as specified within that file. Upload a PDF that you want to interact with into the [data](./data/) directory and add it's directory to the variable `medical_record_pdf_dir`.
+
+Once happy with the configuration, run the following command:
+```
+python main.py
+```
+
+### Running streamlit locally
+
+You can run the streamlit app using the following command:
+```
+streamlit run App.py
+```
+
+You can then upload and interact with PDF documents within your browser.
 
 
+### Testing
 
+Unit tests are provided using the `pytest` framework. To run these, use the following command:
+
+```
+pytest
+```
+
+Some tests are commented out because they make API calls which cost money, in order to prevent the CI/CD pipeline becoming prohibitively expensive.
+
+To run these tests locally, you can comment out / remnove the `@pytest.mark.skip()` statements.
+
+In particular, [test_performance.py](./tests/test_performance.py) enables you to quantify the performance of your current model configuration on a [demo example medical record](./data/medical-record.pdf).
