@@ -17,6 +17,8 @@ debug = False # If True, this will provide step-by-step visualisation of interme
 saving = False # If True, this will save intermediate objects into 'output' folder
 show_warnings = False # If True, will show warnings (which typically come from kor library)
 
+medical_record_pdf_dir = "./data/medical-record.pdf"
+
 skip_pdf_extracting = False
 skip_parsing = False
 skip_extraction_query = False
@@ -44,7 +46,7 @@ query_list = [
 
 def extract_text_from_pdf():
     if not skip_pdf_extracting:
-        extractor = PDFtoText("./data/medical-record.pdf")
+        extractor = PDFtoText(medical_record_pdf_dir)
         if reporting:
             print("\nLoading and extracting text from PDF...")
         extractor.load_initial_text()
