@@ -18,7 +18,7 @@ st.set_page_config(
 with st.sidebar:
     
     st.markdown('''
-    ## ABOUT
+    ## About
     This app extracts information from medical record PDFs into a structured **clinical JSON format™️** (patent pending*).
     
     ---
@@ -53,6 +53,7 @@ with st.sidebar:
 def main():
 
     st.title("The Medical PDF Reader 🩺🔍")
+    st.subheader("Extract Key Information from Medical Record PDFs using AI")
 
     st.write("""To get started, either upload a PDF or upload a JSON that adheres to the **clinical
       JSON format** (see left sidebar for the specification)""")
@@ -118,10 +119,13 @@ def main():
         if st.button("A list of medications the patient is taking, with any known side-effects"):
             extract_info(st.session_state["query_object"], st.session_state["clinical_json"], "A list of medications the patient is taking, with any known side-effects")
 
-        st.markdown("#### Or Custom:")
+        st.markdown("#### Custom Information:")
         info_to_extract = st.text_input("Information to extract")
         if st.button("Extract custom information"):
-            extract_info(st.session_state["query_object"], st.session_state["clinical_json"], info_to_extract)
+            if len(info_to_extract) > 1:
+                extract_info(st.session_state["query_object"], st.session_state["clinical_json"], info_to_extract)
+            else:
+                st.error("Please enter some information to extract.")
 
         st.markdown("#### Extracted Info:")
         if "extracted_info" in st.session_state:
@@ -144,10 +148,14 @@ def main():
             answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Has the patient experienced bright red blood per rectum?")
 
 
-        st.markdown("#### Or Custom:")
+        st.markdown("#### Custom Query:")
         custom_query = st.text_input("Query")
         if st.button("Submit query"):
-            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], custom_query)
+            if len(custom_query) > 1:
+                answer_query(st.session_state["query_object"], st.session_state["clinical_json"], custom_query)
+            else:
+                st.error("Please enter a query.")
+
 
         st.markdown("#### Questions and Answers:")
         if 'query_answered' in st.session_state:
@@ -172,17 +180,21 @@ def extract_clinical_json(pdf_file_path):
     with st.spinner("Extracting Text..."):
         time.sleep(1)
         extraction.load_initial_text()
-        st.success("Raw text successfully extracted.")
+        success1 = st.success("Raw text successfully extracted.")
     with st.spinner("Cleaning Text... (may take up to a minute)"):
         extraction.clean_initial_text_auto()
         extraction.clean_initial_text_llm()
-        st.success("Text has been cleaned.")
+        success2 = st.success("Text has been cleaned.")
+        success1.empty()
     with st.spinner("Parsing Text..."):
         parser = parse_to_clinical.TextToClinicalJSON(extraction.clean_text)
         asyncio.run(parser.parse_text_to_clinical_json())
-        st.success("Text parsing complete.")
+        success3 = st.success("Text parsing complete.")
+        success2.empty()
 
     st.balloons()
+    time.sleep(2)
+    success3.empty()
 
     return parser.clinical_json
 
