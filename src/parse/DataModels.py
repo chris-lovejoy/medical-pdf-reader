@@ -7,6 +7,9 @@ class Medication(BaseModel):
         name: str = Field(description="The name of the medication.")
         dose: str = Field(description="The dose of the medication.")
 
+class FamilyMember(BaseModel):
+        relation: str = Field(description="The relation to the patient. E.g. mother, father, etc")
+        conditions: str = Field(description="A list of all confirmed medical conditions of that family member")
 
 class ClinicalJSON(BaseModel):
         chief_complaint: Optional[str] = Field(
@@ -14,9 +17,9 @@ class ClinicalJSON(BaseModel):
             # examples = [("Presenting complaint chest pain. Patient reported with chest pain since yesterday and some shortness of breath overnight. Doctors assessment: likely musculoskeletal chest pain, with some anxiety",
                     # "chest pain and shortness of breath")]
         )
-        past_medical_history: Optional[str] = Field(
-            description="All previously diagnosed medical conditions or previous surgical operations."
-        )
+        # past_medical_history: Optional[str] = Field(
+        #     description="All previously diagnosed medical conditions or previous surgical operations."
+        # )
         medications: Optional[List[Medication]] = Field(
             description="The medications that the patient is current taking. Does not include medication that they are no longer taking.",
             examples = [
@@ -40,12 +43,12 @@ class ClinicalJSON(BaseModel):
         allergies: Optional[str] = Field(
             description="Information about patient drug allergies."
         )
-        family_history: Optional[str] = Field(
-            description="All of the medical conditions that family members of the patient have had."
+        family_history: Optional[List[FamilyMember]] = Field(
+            # description="All of the medical conditions that family members of the patient have had."
         )
-        social_history: Optional[str] = Field(
-            #    description="All of the patient's social history."
-        )
+        # social_history: Optional[str] = Field(
+        #     #    description="All of the patient's social history."
+        # )
         physical_examination: Optional[str] = Field(
             description="The findings from performing a physical examination of the patient."
         )        
