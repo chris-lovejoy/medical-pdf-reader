@@ -5,22 +5,22 @@ and querying pipeline.
 
 import asyncio
 import json
+import warnings
 
 from src.extract.extract_and_clean_pdf import PDFtoText
 from src.parse.parse_to_clinical import TextToClinicalJSON
 from src.query.query import QueryClinicalJSON
 
-
 # Config for calling the script
 reporting = True # If True, this will report progress and findings to the console
 debug = False # If True, this will provide step-by-step visualisation of intermediates
 saving = False # If True, this will save intermediate objects into 'output' folder
+show_warnings = False # If True, will show warnings (which typically come from kor library)
 
 skip_pdf_extracting = False
 skip_parsing = False
 skip_extraction_query = False
 skip_question_query = False
-
 
 # Specify the information to extract
 extraction_list = [
@@ -40,7 +40,6 @@ query_list = [
     # "Has the patient experienced minimal bright red blood per rectum?",
     # "Is the patient deaf?",
 ]
-
 
 
 def extract_text_from_pdf():
@@ -99,8 +98,6 @@ def parse_clinical_json_from_text(clean_text):
     return clinical_json
 
 
-
-
 def extract_from_clinical_json(clinical_json):
     if not skip_extraction_query:
         queryObject = QueryClinicalJSON(clinical_json)
@@ -115,6 +112,10 @@ def extract_from_clinical_json(clinical_json):
             print("\nExtraction queries complete.")
     else:
         pass
+
+if show_warnings == False:
+    # Filter out the specific UserWarning category
+    warnings.filterwarnings("ignore", category=UserWarning)
 
 def query_from_clinical_json(clinical_json):
     if not skip_question_query:
@@ -141,4 +142,3 @@ if __name__ == '__main__':
     clinical_json = parse_clinical_json_from_text(clean_text)
     extract_from_clinical_json(clinical_json)
     query_from_clinical_json(clinical_json)
-
