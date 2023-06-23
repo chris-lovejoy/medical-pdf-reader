@@ -47,6 +47,73 @@ def main():
 
 
 
+foot = f"""
+<div style="
+    position: fixed;
+    bottom: 0;
+    left: 30%;
+    right: 0;
+    width: 50%;
+    padding: 0px 0px;
+    text-align: center;
+">
+    <p>Made with ❤ by <a href='https://twitter.com/ChrisLovejoy_'>Chris Lovejoy</a></p>
+</div>
+"""
+
+hide_components = """
+    <style>
+    
+    #MainMenu {visibility: hidden;
+    # }
+        footer {visibility: hidden;
+        }
+        .css-card {
+            border-radius: 0px;
+            padding: 30px 10px 10px 10px;
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            font-family: "IBM Plex Sans", sans-serif;
+        }
+        
+        .card-tag {
+            border-radius: 0px;
+            padding: 1px 5px 1px 5px;
+            margin-bottom: 10px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            font-size: 0.6rem;
+            font-family: "IBM Plex Sans", sans-serif;
+            color: white;
+            background-color: green;
+            }
+            
+        .css-zt5igj {left:0;
+        }
+        
+        span.css-10trblm {margin-left:0;
+        }
+        
+        div.css-1kyxreq {margin-top: -40px;
+        }
+        
+        
+    
+        
+        
+
+    </style>
+    """
+
+# Add custom CSS
+st.markdown(foot, unsafe_allow_html=True)
+st.markdown(hide_components, unsafe_allow_html=True,
+)
+
+
+
 if __name__ == '__main__':
     main()
 
