@@ -132,7 +132,38 @@ def main():
         else:
             st.write("No information extracted yet.")
 
+        st.divider()
 
+        st.markdown("## Ask a question")
+        st.markdown("##### For Example:")
+        if st.button("Does the patient have a family history of hypertension?"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Does the patient have a family history of hypertension?")
+        if st.button("Does the patient have a family history of colon cancer?"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Does the patient have a family history of colon cancer?")
+        if st.button("Has the patient experienced bright red blood per rectum?"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Has the patient experienced bright red blood per rectum?")
+
+
+        st.markdown("#### Or Custom:")
+        custom_query = st.text_input("Query")
+        if st.button("Submit query"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], custom_query)
+
+        st.markdown("#### Questions and Answers:")
+        if 'query_answered' in st.session_state:
+            for index, query_response in enumerate(st.session_state["query_object"].query_responses):
+                st.markdown(f"##### \nQUERY {index + 1}:")
+                st.write(f"QUESTION: {query_response['query']}")
+                st.write(f"RESPONSE: {query_response['answer']}")
+                st.write(f"SUPPORTING EVIDENCE: {query_response['source_quote']}")
+                st.write(f"CONFIDENCE: {query_response['confidence_score']}")
+        else:
+            st.write("No questions answered yet.")
+
+        st.divider()
+
+        # st.markdown("### Use Clinical Reasoning")
+        # st.write("TODO")
 
 
 def extract_clinical_json(pdf_file_path):
