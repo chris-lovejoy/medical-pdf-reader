@@ -30,7 +30,7 @@ with st.sidebar:
     
     ---
 
-    To meet the **clinical JSON format**, the JSON file have the following keys in the first level of the hierarchy:
+    To meet the **clinical JSON format**, the JSON file must have the following keys in the first level of the hierarchy:
     - chief_complaint
     - medications
     - allergies
