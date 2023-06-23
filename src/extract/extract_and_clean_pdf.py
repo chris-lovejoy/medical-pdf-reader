@@ -18,10 +18,10 @@ class PDFtoText:
         self.dir = pdf_dir
         self.initial_text = None
         self.clean_text = None
-        self.remove_symbols_llm = models.remove_symbols_llm       
+        self.remove_symbols_llm = models.remove_symbols_llm
         self.identify_acronyms_llm = models.identify_acronyms_llm
-        self.remove_acronyms_llm = models.remove_acronyms_llm 
-    
+        self.remove_acronyms_llm = models.remove_acronyms_llm
+
     def load_and_clean_text(self):
         """
         This function calls the below functions to complete the full loading and cleaning pipeline.
