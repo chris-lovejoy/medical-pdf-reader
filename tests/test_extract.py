@@ -38,7 +38,7 @@ def test_clean_text_auto():
     assert ratio_of_clean_words_contained >= 0.8
 
 
-@pytest.mark.skip(reason="too costly to run via API calls")
+@pytest.mark.skip(reason="too costly to run via API calls") # Uncomment to run locally
 def test_clean_text_llm():
     """
     Tests that cleaning of the text is performed using LLMs
