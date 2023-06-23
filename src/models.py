@@ -1,5 +1,7 @@
 from langchain import OpenAI, HuggingFaceHub
 from langchain.chat_models import ChatOpenAI
+from langchain.embeddings.openai import OpenAIEmbeddings
+
 
 import os
 from dotenv import load_dotenv
@@ -10,6 +12,11 @@ os.environ["OPENAI_API_KEY"] = openai_api_key
 
 huggingface_api_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = huggingface_api_token
+
+
+### EMBEDDINGS
+
+embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 
 
 # (1) EXTRACT

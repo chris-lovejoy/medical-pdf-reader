@@ -31,7 +31,7 @@ class TextToClinicalJSON():
         This function calls the below helper functions to convert from an extracted text string
         into a structured clinical JSON format with the schema defined in the pydantic data model.
         """
-        self.chunk_and_parse_doc()
+        await self.chunk_and_parse_doc()
         self.combine_parsed_chunks()
         self.clean_clinical_json()
 
@@ -55,13 +55,15 @@ class TextToClinicalJSON():
         document_extraction_results = await extract_from_documents(
             chain, split_text, max_concurrency=5, use_uid=False, return_exceptions=True
         )
+        # TODO: add better error handling here. At present, if there's a parsing error then it will reject
+        # ALL data and return None
 
         validated_data = list(
                 itertools.chain.from_iterable(
                     extraction["validated_data"] for extraction in document_extraction_results
                 )
             )
-    
+
         self.chunked_parsing = validated_data
     
     def combine_parsed_chunks(self):
@@ -78,7 +80,7 @@ class TextToClinicalJSON():
             value = tup[1]
             if value is not None:
                 if key in combined_dict:
-                    combined_dict[key] += "\n\n" + str(value)
+                    combined_dict[key] += "\n" + str(value)
                 else:
                     combined_dict[key] = str(value)
             # NOTE: possible alternative is parsing into a list for separate entries, rather than a combined string.
@@ -94,17 +96,8 @@ class TextToClinicalJSON():
 
         clinical_json = copy.deepcopy(self.combined_parsing)
 
-        # TODO: implement this
-
-        # Initial thoughts on the loop is:
-        # 1 extract all of the information for section x, word for word [DONE]
-        # 2 check that there is no more information in the medical record which should be included
-        # 3 check that all of the information that was extracted is most relevant for this section, and not another
-
-        # Also:
-        # removing duplications, removing anything that is not relevant to the section
-        # Removing fragments of sentences perhaps, and anything else
-
+        # TODO: implement this -> can just be a pass to remove duplication, any fragments. simple prompt.
+        # perhaps include a check to ensure information in its most relevant section
         # May need to specify JSON output format here
 
         self.clinical_json = clinical_json
