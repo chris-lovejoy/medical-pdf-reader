@@ -13,17 +13,17 @@ An application to extract and query medical record PDFs
 
 ## About
 The purpose of this app is to enable a user to upload a PDF of a medical record and perform two main tasks:
-1. Extract the information from that PDF into a structured format
-2. Execute queries (using large language models) from the information in that structured format.
+1. **Extract the information** from that PDF into a structured format
+2. **Execute queries** (using large language models) from the information in that structured format.
 
 
 ## Setup
 
-### Interactive Webapp
+### Option 1: Interactive Webapp
 The easiest way to interact with the app is to visit the streamlit app at [this link](https://medical-pdf-reader.streamlit.app/).
 
 
-### Running it locally
+### Option 2: Running it locally
 To run it locally, take the following steps:
 
 #### 1. Install the required dependencies
@@ -92,4 +92,7 @@ Some tests are commented out because they make API calls which cost money, in or
 
 To run these tests locally, you can comment out / remnove the `@pytest.mark.skip()` statements.
 
-In particular, [test_performance.py](./tests/test_performance.py) enables you to quantify the performance of your current model configuration on a [demo example medical record](./data/medical-record.pdf).
+In particular, [test_performance.py](./tests/test_performance.py) enables you to quantify the performance of your current model configuration on a [demo example medical record](./data/medical-record.pdf). To see more detailed reports of test performance, run:
+```
+pytest -s
+```
