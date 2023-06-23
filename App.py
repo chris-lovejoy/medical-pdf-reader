@@ -1,4 +1,12 @@
+import tempfile
+import time
+import json
+
 import streamlit as st
+import asyncio
+
+import src.extract.extract_and_clean_pdf as extract_and_clean_pdf
+
 
 st.set_page_config(
         page_title="Medical PDF Reader",
