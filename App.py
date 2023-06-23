@@ -30,7 +30,7 @@ with st.sidebar:
     
     ---
 
-    The **clinical JSON format** is a single-level JSON document with the following fields:
+    To meet the **clinical JSON format**, the JSON file have the following keys in the first level of the hierarchy:
     - chief_complaint
     - medications
     - allergies
@@ -55,7 +55,7 @@ def main():
     st.title("The Medical PDF Reader 🩺🔍")
 
     st.write("""To get started, either upload a PDF or upload a JSON that adheres to the **clinical
-      JSON format**""")
+      JSON format** (see left sidebar for the specification)""")
 
 
     # Initialise PDF upload state
