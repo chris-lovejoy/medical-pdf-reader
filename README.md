@@ -7,7 +7,7 @@ An application to extract and query medical record PDFs
 ## Table of Contents
 
 - [About](#about)
-- [Install](#setup)
+- [Setup](#setup)
 - [Usage](#usage)
 
 
@@ -40,7 +40,9 @@ Install the dependencies from [requirements.txt](./requirements.txt)
 pip install -r requirements.txt
 ```
 
-### 3. Modify settings in [config.py](./src/config.py), as per preference
+### 3. Modify models and parameters in [models.py](./src/models.py), as per preference
+
+<!-- TODO: consider adding a new config.py file with other considerations -->
 
 
 
