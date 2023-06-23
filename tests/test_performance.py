@@ -124,7 +124,7 @@ def calculate_extraction_score(extraction1, extraction2):
     return rouge1, rougeL
 
 
-def calculate_query_perforamnce():
+def calculate_query_performance():
     
     # TODO: implement this
 
