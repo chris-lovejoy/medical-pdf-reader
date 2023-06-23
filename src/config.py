@@ -1,4 +1,4 @@
-from langchain import OpenAI
+from langchain import OpenAI, HuggingFaceHub
 from langchain.chat_models import ChatOpenAI
 
 import os
@@ -8,45 +8,49 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 os.environ["OPENAI_API_KEY"] = openai_api_key
 
+huggingface_api_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = huggingface_api_token
+
+# TODO: consider renaming this file to 'llms.py' or 'models.py'
 
 # (1) EXTRACT
 
 remove_symbols_llm = ChatOpenAI(
     model_name='gpt-3.5-turbo',
     temperature=0,
-    openai_api_key=openai_api_key
-    )
+)
 
 identify_acronyms_llm = ChatOpenAI(
     model_name='gpt-3.5-turbo',
     temperature=0,
-    openai_api_key=openai_api_key
-    )
+)
 
 remove_acronyms_llm = ChatOpenAI(
     model_name='gpt-3.5-turbo',
     temperature=0,
-    openai_api_key=openai_api_key
-    )
+)
+
+replace_acronyms_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0,
+)
 
 
 # (2) PARSE
 
 # TODO: consider a medical LLM for the clinical JSON parsing
 clinical_parsing_llm = ChatOpenAI(
-        # model_name="gpt-4",
-        model_name="gpt-3.5-turbo",
-        temperature=0,
-        openai_api_key=openai_api_key,
-    )
+    # model_name="gpt-4",
+    model_name="gpt-3.5-turbo",
+    temperature=0,
+)
 
+# Alternative, non-chat model
 # clinical_parsing_llm = OpenAI(
 #     model_name="text-davinci-003",
 #     temperature=0,
 #     openai_api_key=openai_api_key
 # )
-
-
 
 
 
@@ -78,6 +82,8 @@ evaluate_confidence_llm = ChatOpenAI(
     model_name='gpt-3.5-turbo',
     temperature=0.0,
 )
+
+
 
 
 
