@@ -127,6 +127,29 @@ class QueryClinicalJSON():
     
         return source_quote[0]['text']
 
+
+    def evaluate_confidence(self, query, answer, source_quote):
+        """
+        Provides a confidence evaluation based only on the answer and the 
+        extracted source quote to support it.
+        (So if source quote not appropriate, confidence score will be low.)
+        """
+    
+        # Specify and execute chain
+        llm_chain = LLMChain(
+            llm=self.evaluate_confidence_llm,
+            prompt=prompts.evaluate_confidence_prompt
+        )
+        confidence_score = llm_chain.apply([
+            {
+            "query": query,
+            "answer": answer,
+            "source_quote": source_quote
+            },
+        ])
+    
+        return confidence_score[0]['text']
+    
     def enforce_true_false(self, answer):
         """
         This function looks for 'true' or 'false' in the LLM response 
