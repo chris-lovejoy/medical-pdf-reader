@@ -96,6 +96,37 @@ def main():
 
 
 
+def extract_clinical_json(pdf_file_path):
+
+    extraction = extract_and_clean_pdf.PDFtoText(pdf_file_path)
+    with st.spinner("Extracting Text..."):
+        time.sleep(1)
+        extraction.load_initial_text()
+        st.success("Raw text successfully extracted.")
+    with st.spinner("Cleaning Text... (may take up to a minute)"):
+        extraction.clean_initial_text_auto()
+        extraction.clean_initial_text_llm()
+        st.success("Text has been cleaned.")
+    with st.spinner("Parsing Text..."):
+        parser = parse_to_sections.TextToClinicalJSON(extraction.clean_text)
+        asyncio.run(parser.parse_text_to_clinical_json())
+        st.success("Text parsing complete.")
+
+    st.balloons()
+
+    return parser.clinical_json
+
+
+
+
+def save_temp_file(file):
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(file.read())
+    return temp_file.name
+
+
+
+
 foot = f"""
 <div style="
     position: fixed;
