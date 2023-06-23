@@ -53,3 +53,18 @@ class QueryClinicalJSON():
 
         # Save extracted response in a dictionary
         self.extracted_responses[info_to_extract] = result['result']
+
+
+
+    def extract_strings_from_clinical_json(self):
+        """
+        This function converst the dictionary elements in clinical_json
+        into strings with the following format:
+            "{key name} (extracts from medical record): {value}"
+        For example:
+            "chief complaint (extracts from medical record): hemorrhoids"
+        """
+        extracts = []
+        for key, value in self.clinical_json.items():
+            extracts.append(f"{key.replace('_',' ')} (extract from medical record): {value}")
+        return extracts
