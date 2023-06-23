@@ -193,7 +193,7 @@ def extract_info(queryObject, clinical_json, info_to_extract):
         st.session_state["query_object"] = queryObject
         st.session_state["extracted_info"] = True
 
-    success_message = st.success("Extraction complete.")
+    success_message = st.success("Extraction complete. (see below)")
     time.sleep(1)
     success_message.empty()
 
@@ -205,7 +205,7 @@ def answer_query(queryObject, clinical_json, question):
         st.session_state["query_object"] = queryObject
         st.session_state["query_answered"] = True
 
-    success_message = st.success("Query answered.")
+    success_message = st.success("Query answered. (see below)")
     time.sleep(1)
     success_message.empty()
 
