@@ -6,6 +6,7 @@ import streamlit as st
 import asyncio
 
 import src.extract.extract_and_clean_pdf as extract_and_clean_pdf
+import src.parse.parse_to_clinical as parse_to_clinical
 
 
 st.set_page_config(
