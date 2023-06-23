@@ -1,5 +1,6 @@
 import tempfile
-import time
+
+import time 
 import json
 
 import streamlit as st
@@ -7,7 +8,7 @@ import asyncio
 
 import src.extract.extract_and_clean_pdf as extract_and_clean_pdf
 import src.parse.parse_to_clinical as parse_to_clinical
-
+from src.query.query import QueryClinicalJSON
 
 st.set_page_config(
         page_title="Medical PDF Reader",
@@ -54,7 +55,7 @@ def main():
     st.title("The Medical PDF Reader 🩺🔍")
 
     st.write("""To get started, either upload a PDF or upload a JSON that adheres to the **clinical
-        JSON format**""")
+      JSON format**""")
 
 
     # Initialise PDF upload state
@@ -102,7 +103,67 @@ def main():
             )
         # NOTE: the JSON output isn't perfect, as doesn't handle the second indent.
 
+        st.divider()
+        if "query_object" not in st.session_state:
+            st.session_state["query_object"] = QueryClinicalJSON(st.session_state["clinical_json"])
 
+        st.markdown("## Extract Information")
+        st.markdown("##### For Example:")
+        if st.button("Patient's chief complaint"):
+            extract_info(st.session_state["query_object"], st.session_state["clinical_json"], "Patient's chief complaint")
+        if st.button("Suggested treatment plan the doctor is recommending"):
+            extract_info(st.session_state["query_object"], st.session_state["clinical_json"], "Suggested treatment plan the doctor is recommending")
+        if st.button("A list of allergies the patient has"):
+            extract_info(st.session_state["query_object"], st.session_state["clinical_json"], "A list of allergies the patient has")
+        if st.button("A list of medications the patient is taking, with any known side-effects"):
+            extract_info(st.session_state["query_object"], st.session_state["clinical_json"], "A list of medications the patient is taking, with any known side-effects")
+
+        st.markdown("#### Or Custom:")
+        info_to_extract = st.text_input("Information to extract")
+        if st.button("Extract custom information"):
+            extract_info(st.session_state["query_object"], st.session_state["clinical_json"], info_to_extract)
+
+        st.markdown("#### Extracted Info:")
+        if "extracted_info" in st.session_state:
+            parsed_data = list(st.session_state["query_object"].extracted_responses.items())
+            for key, value in parsed_data:
+                st.markdown(f"""**{key}:** {value}""")
+
+        else:
+            st.write("No information extracted yet.")
+
+        st.divider()
+
+        st.markdown("## Ask a question")
+        st.markdown("##### For Example:")
+        if st.button("Does the patient have a family history of hypertension?"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Does the patient have a family history of hypertension?")
+        if st.button("Does the patient have a family history of colon cancer?"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Does the patient have a family history of colon cancer?")
+        if st.button("Has the patient experienced bright red blood per rectum?"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Has the patient experienced bright red blood per rectum?")
+
+
+        st.markdown("#### Or Custom:")
+        custom_query = st.text_input("Query")
+        if st.button("Submit query"):
+            answer_query(st.session_state["query_object"], st.session_state["clinical_json"], custom_query)
+
+        st.markdown("#### Questions and Answers:")
+        if 'query_answered' in st.session_state:
+            for index, query_response in enumerate(st.session_state["query_object"].query_responses):
+                st.markdown(f"##### \nQUERY {index + 1}:")
+                st.write(f"QUESTION: {query_response['query']}")
+                st.write(f"RESPONSE: {query_response['answer']}")
+                st.write(f"SUPPORTING EVIDENCE: {query_response['source_quote']}")
+                st.write(f"CONFIDENCE: {query_response['confidence_score']}")
+        else:
+            st.write("No questions answered yet.")
+
+        st.divider()
+
+        # st.markdown("### Use Clinical Reasoning")
+        # st.write("TODO")
 
 
 def extract_clinical_json(pdf_file_path):
@@ -117,13 +178,36 @@ def extract_clinical_json(pdf_file_path):
         extraction.clean_initial_text_llm()
         st.success("Text has been cleaned.")
     with st.spinner("Parsing Text..."):
-        parser = parse_to_sections.TextToClinicalJSON(extraction.clean_text)
+        parser = parse_to_clinical.TextToClinicalJSON(extraction.clean_text)
         asyncio.run(parser.parse_text_to_clinical_json())
         st.success("Text parsing complete.")
 
     st.balloons()
 
     return parser.clinical_json
+
+def extract_info(queryObject, clinical_json, info_to_extract):
+    
+    with st.spinner("Extracting info..."):
+        queryObject.extract_info(info_to_extract)
+        st.session_state["query_object"] = queryObject
+        st.session_state["extracted_info"] = True
+
+    success_message = st.success("Extraction complete.")
+    time.sleep(1)
+    success_message.empty()
+
+
+def answer_query(queryObject, clinical_json, question):
+
+    with st.spinner("Answering query..."):
+        queryObject.answer_query(question)
+        st.session_state["query_object"] = queryObject
+        st.session_state["query_answered"] = True
+
+    success_message = st.success("Query answered.")
+    time.sleep(1)
+    success_message.empty()
 
 
 
@@ -132,8 +216,6 @@ def save_temp_file(file):
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(file.read())
     return temp_file.name
-
-
 
 
 foot = f"""
@@ -201,8 +283,7 @@ st.markdown(foot, unsafe_allow_html=True)
 st.markdown(hide_components, unsafe_allow_html=True,
 )
 
-
-
 if __name__ == '__main__':
+    st.session_state["extracted"] = None
     main()
 
