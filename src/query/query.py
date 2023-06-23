@@ -1,3 +1,5 @@
+import os
+
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
@@ -5,6 +7,9 @@ from langchain import LLMChain
 
 from .. import prompts
 from .. import models
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = openai_api_key
 
 class QueryClinicalJSON():
     """
@@ -20,7 +25,8 @@ class QueryClinicalJSON():
         self.extract_chain_type = "stuff"
         self.query_chain_type = "stuff"
         self.medical_record_extracts = self.extract_strings_from_clinical_json()
-        self.vectorstore = FAISS.from_texts(self.medical_record_extracts, OpenAIEmbeddings())
+        self.vectorstore = FAISS.from_texts(self.medical_record_extracts, 
+                            OpenAIEmbeddings(openai_api_key=openai_api_key))
         self.extracted_responses = {}
         self.query_responses = []
 
