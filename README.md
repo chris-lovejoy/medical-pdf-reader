@@ -9,6 +9,7 @@ An application to extract and query medical record PDFs
 - [About](#about)
 - [Setup](#setup)
 - [Usage](#usage)
+- [How It Works](#how-it-works)
 
 
 ## About
@@ -96,3 +97,7 @@ In particular, [test_performance.py](./tests/test_performance.py) enables you to
 ```
 pytest -s
 ```
+
+
+## How It Works
+*I will add a description on this shortly.*

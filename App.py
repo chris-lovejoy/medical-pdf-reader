@@ -134,7 +134,7 @@ def main():
 
         st.divider()
 
-        st.markdown("## Ask a question")
+        st.markdown("## Ask a True/False question")
         st.markdown("##### For Example:")
         if st.button("Does the patient have a family history of hypertension?"):
             answer_query(st.session_state["query_object"], st.session_state["clinical_json"], "Does the patient have a family history of hypertension?")
