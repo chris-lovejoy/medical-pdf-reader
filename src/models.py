@@ -11,7 +11,6 @@ os.environ["OPENAI_API_KEY"] = openai_api_key
 huggingface_api_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 os.environ["HUGGINGFACEHUB_API_TOKEN"] = huggingface_api_token
 
-# TODO: consider renaming this file to 'llms.py' or 'models.py'
 
 # (1) EXTRACT
 
