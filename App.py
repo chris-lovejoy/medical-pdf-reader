@@ -44,6 +44,55 @@ def main():
 
     st.title("The Medical PDF Reader 🩺🔍")
 
+    st.write("""To get started, either upload a PDF or upload a JSON that adheres to the **clinical
+        JSON format**""")
+
+
+    # Initialise PDF upload state
+    if "pdf_uploaded" not in st.session_state:
+        st.session_state["pdf_uploaded"] = False
+
+    # Initialise JSON upload state
+    if "json_uploaded" not in st.session_state:
+        st.session_state["json_uploaded"] = False
+
+    st.markdown("### Option 1: Upload a medical record as a PDF")
+    pdf = st.file_uploader("Upload your PDF", type='pdf') 
+    
+    if pdf is not None:
+        st.session_state["pdf_uploaded"] = True
+    
+    if st.session_state["pdf_uploaded"] is False:
+        st.markdown("### Option 2: Upload a JSON that adheres to the **clinical JSON™ format**")
+        json_data = st.file_uploader("Upload a clinical JSON file", type='json') 
+        
+        if json_data is not None:
+            clinical_json = json.loads(json_data.read())
+            st.session_state["json_uploaded"] = True
+            st.session_state["clinical_json"] = clinical_json
+
+
+    if pdf is not None:
+        pdf_file_path = save_temp_file(pdf)
+
+        if st.button("Extract Information into Clinical JSON"):
+            clinical_json = extract_clinical_json(pdf_file_path)
+            st.session_state["clinical_json"] = clinical_json
+            st.session_state["json_uploaded"] = True           
+
+    if st.session_state["json_uploaded"]:
+
+        with st.expander("View Clinical JSON data"):
+            st.write(st.session_state["clinical_json"])
+        
+        json_data = json.dumps(st.session_state["clinical_json"], indent=4)
+
+        st.download_button("Download Clinical JSON data", 
+            json_data, file_name="clinical_json.json", 
+            mime="application/json"
+            )
+        # NOTE: the JSON output isn't perfect, as doesn't handle the second indent.
+
 
 
 
