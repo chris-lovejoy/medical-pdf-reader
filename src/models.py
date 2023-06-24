@@ -1,6 +1,8 @@
 from langchain import OpenAI, HuggingFaceHub
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.agents import Tool
+from langchain.tools import DuckDuckGoSearchRun
 
 
 import os
@@ -90,10 +92,31 @@ evaluate_confidence_llm = ChatOpenAI(
 )
 
 
+
 # (4) CLINICAL EVALUATION
+
+clinical_eval_llm = OpenAI(
+    temperature=0.0,
+)
+
+# Alternative clinical LLM for query task
+# clinical_eval_llm = HuggingFaceHub(
+#     repo_id="emilyalsentzer/Bio_ClinicalBERT",
+#     model_kwargs={"temperature": 0, "max_length": 64},
+#     task="text-generation"
+# )
 
 treatment_plan_llm = ChatOpenAI(
     model_name='gpt-3.5-turbo',
     temperature=0.0,
 )
 
+
+search = DuckDuckGoSearchRun()
+clinical_eval_tools = [
+    Tool(
+        name = "Search",
+        func=search.run,
+        description="useful for when you need to answer questions about current events"
+    ),
+]
