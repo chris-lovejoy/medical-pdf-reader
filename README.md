@@ -3,6 +3,7 @@ An application to extract and query medical record PDFs
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme) [![run unit tests](https://github.com/chris-lovejoy/medical-pdf-reader/actions/workflows/run_pytests.yml/badge.svg)](https://github.com/chris-lovejoy/medical-pdf-reader/actions/workflows/run_pytests.yml)
 
+---
 
 ## Table of Contents
 
