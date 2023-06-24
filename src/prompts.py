@@ -157,3 +157,16 @@ evaluate_confidence_prompt = PromptTemplate(
     template=EVALUATE_CONFIDENCE_PROMPT_TEMPLATE, 
     input_variables=["query", "answer", "source_quote"]
 )
+
+
+## ================= Clinical Evaluation  =================== ##
+
+TREATMENT_PLAN_TEMPLATE = """Identify and name the single main element in this treatment plan.
+
+Treatment plan: {treatment_plan}
+
+Key element of treatment plan: """
+treatment_plan_prompt = PromptTemplate(
+    template=TREATMENT_PLAN_TEMPLATE, 
+    input_variables=["treatment_plan"]
+)
