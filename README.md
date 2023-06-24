@@ -51,10 +51,10 @@ pip install -r requirements.txt
 #### 2. Add your API keys to .env
 The format is specified in [.env.example](.env.example).
 
-(Note: if you don't add a hugging face API key, some of the unit tests will fail. You can prevent this by commenting out using the huggingface API import in [models.py](./src/models.py).)
+(Note: if you don't add a hugging face API key, some of the unit tests may fail. You can prevent this by commenting out using the huggingface API import in [models.py](./src/models.py).)
 
 
-#### 3. Modify models and parameters in [models.py](./src/models.py), as per preference
+#### 3. Modify models and parameters in [models.py](./src/models.py), as per preference (Optional)
 
 <!-- TODO: consider adding a new config.py file with other considerations -->
 
@@ -62,7 +62,7 @@ The format is specified in [.env.example](.env.example).
 
 ## Usage
 
-After setting up the local environemnt, you can either run the app via the command line or interact with it via streamlit.
+After setting up the local environment, you can either run the app via the command line or interact with it via streamlit.
 
 
 ### Via the command line
@@ -114,7 +114,7 @@ First, the PDF is extracted into raw text. That raw text is cleaned using a comb
 The clean version of the text is then parsed into a JSON format with relevant clinical sections (based on user configuration), which include a combination of:
 - **chief_complaint**: The symptom or symptoms that brought the patient to the doctor and how they have evolved over time. Also known as the presenting complaint
 - **medications**: The medications that the patient is **currently** taking.
-- **allergie**: Any known medication allergies
+- **allergies**: Any known medication allergies
 - **family_history**: Medical conditions of all family members
 - **social_history**: The patient's context and lifestyle
 - **physical_examination**: The findings from performing a physical examination of the patient.

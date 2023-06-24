@@ -21,8 +21,6 @@ with st.sidebar:
     ## About
     This app extracts information from medical record PDFs into a structured **clinical JSON format™️** (patent pending*).
     
-    ---
-
     This enables you to:
     - **Extract specific information** contained within the medical record
     - **Ask questions** about content within the medical record
@@ -30,11 +28,13 @@ with st.sidebar:
     
     ---
 
-    To meet the **clinical JSON format**, the JSON file must have the following keys in the first level of the hierarchy:
+    ## The Clinical JSON Format
+    This app will work for any JSON with a single-level hierarchy, provided each value is a text string. However, for best performance use some combination of the following keys in the first level of the hierarchy:
     - chief_complaint
     - medications
     - allergies
     - family_history
+    - social_history
     - physical_examination
     - treatment_plan
     
@@ -56,7 +56,7 @@ def main():
     st.subheader("Extract Key Information from Medical Record PDFs using AI")
 
     st.write("""To get started, either upload a PDF or upload a JSON that adheres to the **clinical
-      JSON format** (see left sidebar for the specification)""")
+      JSON format** (see left sidebar for the specification).""")
 
 
     # Initialise PDF upload state
@@ -74,7 +74,7 @@ def main():
         st.session_state["pdf_uploaded"] = True
     
     if st.session_state["pdf_uploaded"] is False:
-        st.markdown("### Option 2: Upload a JSON that adheres to the **clinical JSON™ format**")
+        st.markdown("### Option 2: Upload a JSON with the **clinical JSON™ format**")
         json_data = st.file_uploader("Upload a clinical JSON file", type='json') 
         
         if json_data is not None:
