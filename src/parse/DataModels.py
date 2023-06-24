@@ -21,7 +21,7 @@ class ClinicalJSON(BaseModel):
         #     description="All previously diagnosed medical conditions or previous surgical operations."
         # )
         medications: Optional[List[Medication]] = Field(
-            description="The medications that the patient is current taking. Does not include medication that they are no longer taking.",
+            description="The medications that the patient is currently taking. Does not include medication that they are no longer taking.",
             examples = [
                 (
                     "Medication List chloramphenicol 0.5 mg QDS chlordiazepoxide 5mg when required salbutamol inahler 4 times a day Past Medical History review last week by their GP",

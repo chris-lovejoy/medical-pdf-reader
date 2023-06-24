@@ -17,6 +17,7 @@ The purpose of this app is to enable a user to upload a PDF of a medical record 
 1. **Extract the information** from that PDF into a structured format
 2. **Execute queries** (using large language models) from the information in that structured format.
 
+---
 
 ## Setup
 
@@ -55,7 +56,7 @@ The format is specified in [.env.example](.env.example).
 
 <!-- TODO: consider adding a new config.py file with other considerations -->
 
-
+---
 
 ## Usage
 
@@ -98,6 +99,25 @@ In particular, [test_performance.py](./tests/test_performance.py) enables you to
 pytest -s
 ```
 
+---
 
 ## How It Works
-*I will add a description on this shortly.*
+
+The functionality is divided into several modules, as shown below:
+
+![](./diagrams/medical-pdf-extraction-schema.png)
+
+First, the PDF is extracted into raw text. That raw text is cleaned using a combination of 'standard' text-cleaning libraries and large language models (see diagram below).
+
+The clean version of the text is then parsed into a JSON format with relevant clinical sections (based on user configuration), which include a combination of:
+- **chief_complaint**: The symptom or symptoms that brought the patient to the doctor and how they have evolved over time. Also known as the presenting complaint
+- **medications**: The medications that the patient is **currently** taking.
+- **allergie**: Any known medication allergies
+- **family_history**: Medical conditions of all family members
+- **social_history**: The patient's context and lifestyle
+- **physical_examination**: The findings from performing a physical examination of the patient.
+- **treatment_plan**: The step-by-step treatment plan by the doctor for the patient.
+
+![](./diagrams/pdf-extraction.png)
+
+From that structured format, large language models are used to query for different information, using a variety of retrieval-based question-answer chains.
