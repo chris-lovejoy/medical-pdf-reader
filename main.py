@@ -10,6 +10,7 @@ import warnings
 from src.extract.extract_and_clean_pdf import PDFtoText
 from src.parse.parse_to_clinical import TextToClinicalJSON
 from src.query.query import QueryClinicalJSON
+from src.reasoning.clinical_eval import ClinicalEval
 
 # Config for calling the script
 reporting = True # If True, this will report progress and findings to the console
@@ -17,12 +18,11 @@ debug = False # If True, this will provide step-by-step visualisation of interme
 saving = False # If True, this will save intermediate objects into 'output' folder
 show_warnings = False # If True, will show warnings (which typically come from kor library)
 
-medical_record_pdf_dir = "./data/medical-record.pdf"
-
-skip_pdf_extracting = False
-skip_parsing = False
-skip_extraction_query = False
+skip_pdf_extracting = True
+skip_parsing = True
+skip_extraction_query = True
 skip_question_query = False
+skip_clinical_eval = False
 
 # Specify the information to extract
 extraction_list = [
@@ -134,8 +134,21 @@ def query_from_clinical_json(clinical_json):
                 print(f"CONFIDENCE: {queryObject.query_responses[index]['confidence_score']}")
         if reporting:
             print("\nQuestion queries complete.")
+        return queryObject
     else:
-        pass
+        return None
+
+def evaluate_clinical_reasoning(clinical_json, queryObject):
+    if not skip_question_query:
+        if not skip_clinical_eval:
+            if reporting:
+                print("\nPerforming evaluation of clinical treatment plan...")
+            clinical_evaluator = ClinicalEval(clinical_json, queryObject.query_responses)
+            clinical_evaluator.evaluate_treatment_plan()
+            if reporting:
+                print("\Evaluation of clinical treatment plan complete.")
+    else:
+        print("Treatment plan not evaluated. Requires question queries to be answered.")
 
 
 if __name__ == '__main__':
@@ -143,4 +156,5 @@ if __name__ == '__main__':
     clean_text = extract_text_from_pdf()
     clinical_json = parse_clinical_json_from_text(clean_text)
     extract_from_clinical_json(clinical_json)
-    query_from_clinical_json(clinical_json)
+    queryObject = query_from_clinical_json(clinical_json)
+    evaluate_clinical_reasoning(clinical_json, queryObject)
