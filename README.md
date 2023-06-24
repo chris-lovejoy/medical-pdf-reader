@@ -11,6 +11,7 @@ An application to extract and query medical record PDFs
 - [Usage](#usage)
 - [How It Works](#how-it-works)
 
+---
 
 ## About
 The purpose of this app is to enable a user to upload a PDF of a medical record and perform two main tasks:
