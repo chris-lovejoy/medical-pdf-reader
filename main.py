@@ -146,7 +146,7 @@ def evaluate_clinical_reasoning(clinical_json, queryObject):
             clinical_evaluator = ClinicalEval(clinical_json, queryObject.query_responses)
             clinical_evaluator.evaluate_treatment_plan()
             if reporting:
-                print("\Evaluation of clinical treatment plan complete.")
+                print("Evaluation of clinical treatment plan complete.")
     else:
         print("Treatment plan not evaluated. Requires question queries to be answered.")
 
