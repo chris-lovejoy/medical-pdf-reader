@@ -90,7 +90,10 @@ evaluate_confidence_llm = ChatOpenAI(
 )
 
 
+# (4) CLINICAL EVALUATION
 
-
-
+treatment_plan_llm = ChatOpenAI(
+    model_name='gpt-3.5-turbo',
+    temperature=0.0,
+)
 
