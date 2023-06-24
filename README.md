@@ -74,6 +74,8 @@ Once happy with the configuration, run the following command:
 python main.py
 ```
 
+The output should look something like [this](./diagrams/main-output.png).
+
 ### Running streamlit locally
 
 You can run the streamlit app using the following command:
