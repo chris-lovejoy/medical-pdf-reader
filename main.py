@@ -18,9 +18,11 @@ debug = False # If True, this will provide step-by-step visualisation of interme
 saving = False # If True, this will save intermediate objects into 'output' folder
 show_warnings = False # If True, will show warnings (which typically come from kor library)
 
-skip_pdf_extracting = True
-skip_parsing = True
-skip_extraction_query = True
+medical_record_pdf_dir = "./data/medical-record.pdf"
+
+skip_pdf_extracting = False
+skip_parsing = False
+skip_extraction_query = False
 skip_question_query = False
 skip_clinical_eval = False
 
