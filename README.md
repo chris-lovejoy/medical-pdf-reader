@@ -109,14 +109,14 @@ The functionality is divided into several modules, as shown below:
 
 ![](./diagrams/medical-pdf-extraction-schema.png)
 
-#### PDF extraction module
+### PDF extraction module
 
 First, the PDF is extracted into raw text. That raw text is cleaned using a combination of 'standard' text-cleaning libraries and large language models (see diagram below).
 
 ![](./diagrams/pdf-extraction.png)
 
 
-#### Clinical parsing module
+### Clinical parsing module
 
 The clean version of the text is then parsed into a JSON format with relevant clinical sections (based on user configuration), which include a combination of:
 - **chief_complaint**: The symptom or symptoms that brought the patient to the doctor and how they have evolved over time. Also known as the presenting complaint
@@ -128,7 +128,7 @@ The clean version of the text is then parsed into a JSON format with relevant cl
 - **treatment_plan**: The step-by-step treatment plan by the doctor for the patient.
 
 
-#### Querying modules
+### Querying modules
 
 Information in that structured format is used to generate embeddings. Large language models are then used to query for different information, using a variety of retrieval-based question-answer chains:
 
