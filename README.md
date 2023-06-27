@@ -28,7 +28,7 @@ The easiest way to interact with the app is to visit the streamlit app at [this 
 
 
 ### Option 2: Running it locally
-To run it locally, take the following steps:
+Locally, you can both run this via a python script or run the interactive webapp. The required setup to do so is the following:
 
 #### 1. Install the required dependencies
 
