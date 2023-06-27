@@ -56,8 +56,6 @@ The format is specified in [.env.example](.env.example).
 
 #### 3. Modify models and parameters in [models.py](./src/models.py), as per preference (Optional)
 
-<!-- TODO: consider adding a new config.py file with other considerations -->
-
 ---
 
 ## Usage
@@ -96,7 +94,7 @@ pytest
 
 Some tests are commented out because they make API calls which cost money, in order to prevent the CI/CD pipeline becoming prohibitively expensive.
 
-To run these tests locally, you can comment out / remnove the `@pytest.mark.skip()` statements.
+To run these tests locally, you can comment out / remove the `@pytest.mark.skip()` statements.
 
 In particular, [test_performance.py](./tests/test_performance.py) enables you to quantify the performance of your current model configuration on a [demo example medical record](./data/medical-record.pdf). To see more detailed reports of test performance, run:
 ```
@@ -111,7 +109,14 @@ The functionality is divided into several modules, as shown below:
 
 ![](./diagrams/medical-pdf-extraction-schema.png)
 
+#### PDF extraction module
+
 First, the PDF is extracted into raw text. That raw text is cleaned using a combination of 'standard' text-cleaning libraries and large language models (see diagram below).
+
+![](./diagrams/pdf-extraction.png)
+
+
+#### Clinical parsing module
 
 The clean version of the text is then parsed into a JSON format with relevant clinical sections (based on user configuration), which include a combination of:
 - **chief_complaint**: The symptom or symptoms that brought the patient to the doctor and how they have evolved over time. Also known as the presenting complaint
@@ -122,6 +127,15 @@ The clean version of the text is then parsed into a JSON format with relevant cl
 - **physical_examination**: The findings from performing a physical examination of the patient.
 - **treatment_plan**: The step-by-step treatment plan by the doctor for the patient.
 
-![](./diagrams/pdf-extraction.png)
 
-From that structured format, large language models are used to query for different information, using a variety of retrieval-based question-answer chains.
+#### Querying modules
+
+Information in that structured format is used to generate embeddings. Large language models are then used to query for different information, using a variety of retrieval-based question-answer chains:
+
+![](./diagrams/query-schema.png)
+
+The extract query module is simplest, simply identifying the most relevant vectors and then finding the relevant information from within them.
+
+The question query module involves a chain of (1) answering the question, (2) identifying the precise source text for the answer and (3) determining a confidence score based only on that answer and source text.
+
+Finally, the clinical reasoning module uses a ReAct agent. It uses the treatment plan and answers to the question queries, searches the internet for the most up-to-date information related to them and makes a final clinical decision around the appropriateness of the treatment plan.
