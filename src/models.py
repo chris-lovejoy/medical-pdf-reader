@@ -24,7 +24,7 @@ embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 # (1) EXTRACT
 
 remove_symbols_llm = ChatOpenAI(
-    model_name='gpt-3.5-turbo',
+    model_name='gpt-3.5-turbo-16k',
     temperature=0,
 )
 
@@ -33,20 +33,14 @@ identify_acronyms_llm = ChatOpenAI(
     temperature=0,
 )
 
-remove_acronyms_llm = ChatOpenAI(
-    model_name='gpt-3.5-turbo',
-    temperature=0,
-)
-
 replace_acronyms_llm = ChatOpenAI(
-    model_name='gpt-3.5-turbo',
+    model_name='gpt-3.5-turbo-16k',
     temperature=0,
 )
 
 
 # (2) PARSE
 
-# TODO: consider a medical LLM for the clinical JSON parsing
 clinical_parsing_llm = ChatOpenAI(
     # model_name="gpt-4",
     model_name="gpt-3.5-turbo",
@@ -60,6 +54,12 @@ clinical_parsing_llm = ChatOpenAI(
 #     openai_api_key=openai_api_key
 # )
 
+# Alternative clinical LLM for query task
+# clinical_parsing_llm = HuggingFaceHub(
+#     repo_id="emilyalsentzer/Bio_ClinicalBERT",
+#     model_kwargs={"temperature": 0, "max_length": 64},
+#     task="text-generation"
+# )
 
 
 # (3) EXTRACT AND QUERY
@@ -74,10 +74,10 @@ answer_query_llm = ChatOpenAI(
     temperature=0.0,
 )
 
-# Alternative clinical LLM for query task
+# # Alternative clinical LLM for query task
 # answer_query_llm = HuggingFaceHub(
 #     repo_id="emilyalsentzer/Bio_ClinicalBERT",
-#     model_kwargs={"temperature": 0, "max_length": 64},
+#     model_kwargs={"temperature": 0, "max_length": 256},
 #     task="text-generation"
 # )
 

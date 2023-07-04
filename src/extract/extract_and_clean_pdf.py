@@ -20,7 +20,7 @@ class PDFtoText:
         self.clean_text = None
         self.remove_symbols_llm = models.remove_symbols_llm
         self.identify_acronyms_llm = models.identify_acronyms_llm
-        self.remove_acronyms_llm = models.remove_acronyms_llm
+        self.replace_acronyms_llm = models.replace_acronyms_llm
 
     def load_and_clean_text(self):
         """
@@ -119,7 +119,7 @@ class PDFtoText:
         list_of_acronyms = llm_chain.apply([{"context": clean_text}])
 
         llm_chain = LLMChain(
-            llm=self.remove_acronyms_llm,
+            llm=self.replace_acronyms_llm,
             prompt=prompts.replace_acronyms_prompt
         )
         clean_expanded_text = llm_chain.apply([{"context": clean_text, "list_of_acronyms": list_of_acronyms}])
