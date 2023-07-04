@@ -76,9 +76,15 @@ def main():
     if st.session_state["pdf_uploaded"] is False:
         st.markdown("### Option 2: Upload a JSON with the **clinical JSON™ format**")
         json_data = st.file_uploader("Upload a clinical JSON file", type='json') 
-        
+        use_example = st.button('Use an example clinical JSON')
         if json_data is not None:
             clinical_json = json.loads(json_data.read())
+            st.session_state["json_uploaded"] = True
+            st.session_state["clinical_json"] = clinical_json
+
+        if use_example:
+            with open("output/clinical-json.json") as f:
+                clinical_json = json.load(f)
             st.session_state["json_uploaded"] = True
             st.session_state["clinical_json"] = clinical_json
 
@@ -179,7 +185,7 @@ def extract_clinical_json(pdf_file_path):
         time.sleep(1)
         extraction.load_initial_text()
         success1 = st.success("Raw text successfully extracted.")
-    with st.spinner("Cleaning Text... (may take up to a minute)"):
+    with st.spinner("Cleaning Text... (may take a few minutes)"):
         extraction.clean_initial_text_auto()
         extraction.clean_initial_text_llm()
         success2 = st.success("Text has been cleaned.")
