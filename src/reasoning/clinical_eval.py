@@ -72,14 +72,17 @@ class ClinicalEval():
 
     def get_major_treatment(self):
 
-        llm_chain = LLMChain(
-            llm=self.treatment_plan_llm,
-            prompt=prompts.treatment_plan_prompt
-        )
-        extracted_key_treatment = llm_chain.apply([{"treatment_plan": self.clinical_json['treatment_plan']}])
+        if 'treatment_plan' in self.clinical_json:
+            llm_chain = LLMChain(
+                llm=self.treatment_plan_llm,
+                prompt=prompts.treatment_plan_prompt
+            )
+            extracted_key_treatment = llm_chain.apply([{"treatment_plan": self.clinical_json['treatment_plan']}])
 
-        return extracted_key_treatment[0]['text']
+            return extracted_key_treatment[0]['text']
 
+        else:
+            raise Exception("No treatment plan found in clinical JSON.")
 
 
     def load_query_responses(self, memory):
