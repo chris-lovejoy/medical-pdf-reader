@@ -29,7 +29,7 @@ remove_symbols_llm = ChatOpenAI(
 )
 
 identify_acronyms_llm = ChatOpenAI(
-    model_name='gpt-3.5-turbo',
+    model_name='gpt-3.5-turbo-16k',
     temperature=0,
 )
 
