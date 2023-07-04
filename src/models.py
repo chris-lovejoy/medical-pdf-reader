@@ -24,12 +24,12 @@ embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
 # (1) EXTRACT
 
 remove_symbols_llm = ChatOpenAI(
-    model_name='gpt-3.5-turbo-16k',
+    model_name='gpt-3.5-turbo',
     temperature=0,
 )
 
 identify_acronyms_llm = ChatOpenAI(
-    model_name='gpt-3.5-turbo-16k',
+    model_name='gpt-3.5-turbo',
     temperature=0,
 )
 

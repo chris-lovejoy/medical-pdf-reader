@@ -3,6 +3,8 @@
 from unstructured.partition.pdf import partition_pdf
 from unstructured.cleaners.core import clean, clean_non_ascii_chars
 
+import textwrap3
+
 from langchain import LLMChain
 
 from .. import models
@@ -16,7 +18,10 @@ class PDFtoText:
     """
     def __init__(self, pdf_dir):
         self.dir = pdf_dir
+        self.chunk_length = 2000
         self.initial_text = None
+        self.text_chunks = None
+        self.clean_chunks = []
         self.clean_text = None
         self.remove_symbols_llm = models.remove_symbols_llm
         self.identify_acronyms_llm = models.identify_acronyms_llm
@@ -27,8 +32,12 @@ class PDFtoText:
         This function calls the below functions to complete the full loading and cleaning pipeline.
         """
         self.load_initial_text()
-        self.clean_initial_text_auto()
-        self.clean_initial_text_llm()
+        self.split_text()
+        for chunk in self.text_chunks:
+            clean_chunk = self.clean_initial_text_auto(chunk)
+            cleaner_chunk = self.clean_initial_text_llm(clean_chunk)
+            self.clean_chunks.append(cleaner_chunk)
+        self.clean_text = ' '.join()
 
     def load_initial_text(self):
         """
@@ -40,35 +49,42 @@ class PDFtoText:
             text += "\n" + str(element)
         self.initial_text = text
 
-    def clean_initial_text_auto(self):
+    def split_text(self):
+        """
+        This function splits the text into individual sections which can be cleaned separately.
+        """
+        chunks = textwrap3.wrap(self.initial_text, self.chunk_length)
+        self.text_chunks = chunks
+
+    def clean_initial_text_auto(self, chunk):
         """
         This function uses the unstructured library to clean the initial text
         """
         # Declare clean text variable to pass through into subsequent functions
-        clean_text = self.initial_text
+        # clean_text = self.initial_text
 
         # Use unstructured library cleaner functions
-        clean_text = clean(clean_text, dashes=True, bullets=True, 
+        clean_chunk = clean(chunk, dashes=True, bullets=True, 
                            lowercase=False, extra_whitespace=False)
-        clean_text = clean_non_ascii_chars(clean_text)
+        clean_chunk = clean_non_ascii_chars(clean_chunk)
 
         # TODO: Consider adding alternative methods of cleaning too, such as unstructured
         # library cleaning functions and spacy functions as per this article:
         # https://www.analyticsvidhya.com/blog/2021/06/data-extraction-from-unstructured-pdfs/
 
-        self.clean_text = clean_text
+        return clean_chunk
 
-    def clean_initial_text_llm(self):
+    def clean_initial_text_llm(self, clean_chunk):
         """
         This function uses LLMs to clean the extracted text, by calling other LLM helper
         scripts below.
         NOTE: this must be run after clean_initial_auto
         """
         # Use LLM to remove artefact symbols from document
-        clean_text = self.remove_symbols_with_llm()
+        cleaner_chunk = self.remove_symbols_with_llm(clean_chunk)
 
         # Use LLM to expand out acronyms
-        clean_text = self.expand_acronyms_with_llm(clean_text)
+        cleaner_chunk = self.expand_acronyms_with_llm(cleaner_chunk)
 
         # Use LLM to clean spelling and grammar
         # (But commented out as not necessary)
@@ -78,9 +94,9 @@ class PDFtoText:
         # provides a wildly different (e.g. much shorter) output, then it just sticks with the
         # 'unclean' original
 
-        self.clean_text = clean_text
+        return cleaner_chunk
 
-    def remove_symbols_with_llm(self):
+    def remove_symbols_with_llm(self, clean_chunk):
         """
         This function uses LLMs to remove symbol artefacts from the initial extraction
         from the PDF.
@@ -92,12 +108,12 @@ class PDFtoText:
             llm=self.remove_symbols_llm,
             prompt=prompts.remove_symbols_prompt
         )
-        clean_extracted_text = llm_chain.apply([{"context": self.clean_text}])
+        clean_extracted_text = llm_chain.apply([{"context": clean_chunk}])
 
         return clean_extracted_text[0]['text']
 
 
-    def expand_acronyms_with_llm(self, clean_text):
+    def expand_acronyms_with_llm(self, cleaner_chunk):
         """
         This function uses LLMs to expand out medical acronyms in the text.
         It does so in two stages:
@@ -116,13 +132,13 @@ class PDFtoText:
             llm=self.identify_acronyms_llm,
             prompt=prompts.identify_acronyms_prompt
         )
-        list_of_acronyms = llm_chain.apply([{"context": clean_text}])
+        list_of_acronyms = llm_chain.apply([{"context": cleaner_chunk}])
 
         llm_chain = LLMChain(
             llm=self.replace_acronyms_llm,
             prompt=prompts.replace_acronyms_prompt
         )
-        clean_expanded_text = llm_chain.apply([{"context": clean_text, "list_of_acronyms": list_of_acronyms}])
+        clean_expanded_text = llm_chain.apply([{"context": cleaner_chunk, "list_of_acronyms": list_of_acronyms}])
 
         return clean_expanded_text[0]['text']
 
