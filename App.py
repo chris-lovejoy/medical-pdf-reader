@@ -38,7 +38,7 @@ with st.sidebar:
     - physical_examination
     - treatment_plan
     
-    You can see an example [here](https://github.com/chris-lovejoy/medical-pdf-reader/blob/main/tests/example.json).    
+    You can see an example [here](https://github.com/chris-lovejoy/medical-pdf-reader/blob/main/tests/example.json).
     
     ---
 
@@ -127,12 +127,13 @@ def main():
             else:
                 st.error("Please enter some information to extract.")
 
+        st.markdown("*Note: Only information contained within the clinical JSON can be extracted. You can inspect what it contains above.*")
+
         st.markdown("#### Extracted Info:")
         if "extracted_info" in st.session_state:
             parsed_data = list(st.session_state["query_object"].extracted_responses.items())
             for key, value in parsed_data:
                 st.markdown(f"""**{key}:** {value}""")
-
         else:
             st.write("No information extracted yet.")
 
@@ -169,9 +170,6 @@ def main():
             st.write("No questions answered yet.")
 
         st.divider()
-
-        # st.markdown("### Use Clinical Reasoning")
-        # st.write("TODO")
 
 
 def extract_clinical_json(pdf_file_path):
