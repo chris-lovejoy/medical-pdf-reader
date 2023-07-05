@@ -78,7 +78,7 @@ def test_extraction_performance():
         rougeL_scores.append(rougeL)
 
     if verbose:
-        print("rouge1 scores are:", rouge1_scores)
+        print("\nrouge1 scores are:", rouge1_scores)
         print("rougeL scores are:", rougeL_scores)
 
         print("Extractions are:", queryObject.extracted_responses.values())
@@ -99,6 +99,9 @@ def test_evaluation_true_false():
         queryObject.answer_query(querying_ground_truth[0]['query'])
 
     for index in range(len(querying_ground_truth)):
+        print(f"\nFOR QUERY '{querying_ground_truth[0]['query']}:")
+        print(f"Predicted: {queryObject.query_responses[index]['answer']}")
+        print(f"Actual: {querying_ground_truth[index]['answer']}")
         assert queryObject.query_responses[index]['answer'] == querying_ground_truth[index]['answer']
         # TODO: consider setting up the assert differently -> as it will stop before doing the rest.
 
