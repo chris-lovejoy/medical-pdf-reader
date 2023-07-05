@@ -24,7 +24,7 @@ The purpose of this app is to enable a user to upload a PDF of a medical record 
 ## Setup
 
 ### Option 1: Interactive Webapp
-The easiest way to interact with the app is to visit the streamlit app at [this link](https://medical-pdf-reader.streamlit.app/).
+The easiest way to interact with the app is to visit the streamlit app at [this link](https://medical-pdf-reader.streamlit.app/). (However, this occasionally has bugs which don't manifest when running locally.)
 
 
 ### Option 2: Running it locally
