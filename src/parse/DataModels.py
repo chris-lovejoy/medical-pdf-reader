@@ -51,7 +51,7 @@ class ClinicalJSON(BaseModel):
         # )
         physical_examination: Optional[str] = Field(
             description="The findings from performing a physical examination of the patient."
-        )        
+        )
         # doctors_assessment: Optional[str] = Field(
         #     description="The doctor's concluding assessment of the patient."
         # ) # NOTE: Not included, as harms performance for treatment plan

@@ -45,8 +45,6 @@ INFO_EXTRACTION_STUFF_PROMPT_TEMPLATE = """Please extract the information about 
 Segments of the medical record:
 {context}
 
-Focus on answering the question based on the text, and only using outside information if essential.
-
 {question}: """
 # Statements that hindered performance, so I removed them:
     # Please answer, using exact copies of the relevant parts of the text where appropriate.
